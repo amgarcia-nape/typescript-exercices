@@ -1,7 +1,12 @@
 {
+
   // Write the type for assign with 2, 3, 4, 5 arguments
-  //function assign(...objects: any[]): any {
-  function assign<T extends { keys: any }(...objects: T[]): T {
+  
+  function assign<A,B,C,D,E>(o1: A, o2: B, o3: C, o4: D, o5: E ): A & B & C & D & E  
+  function assign<A,B,C,D>(o1: A, o2: B, o3: C, o4: D ): A & B & C & D
+  function assign<A,B,C>(o1: A, o2: B, o3: C ): A & B & C
+  function assign<A,B>(o1: A, o2: B ): A & B
+  function assign(...objects: any[]): any {
     throw "Not implemented" // ignore this line
   }
 

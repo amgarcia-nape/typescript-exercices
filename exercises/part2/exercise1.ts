@@ -10,7 +10,8 @@
   class MyCollection<TYPE> {
     private data: TYPE[] = []
 
-    constructor(initial?: TYPE[]) {
+    // constructor(initial?: TYPE[]) {
+    constructor(initial?: Iterable<TYPE> | ArrayLike<TYPE> ) {
       if (initial) this.data = Array.from(initial);
     }
 
@@ -22,7 +23,7 @@
       this.data.push(value);
     }
 
-    forEach( callback: ( data: TYPE, index?: number ) => any ) {
+    forEach( callback: ( data: TYPE, index: number ) => any ) {
       for (let i = 0; i < this.data.length; i++) {
         callback(this.data[i], i);
       }
@@ -38,7 +39,8 @@
   // No compile errors
   const c1 = new MyCollection();
 
-  const c2 = new MyCollection<number>( Array.from( new Set ([1, 2, 3] ) ) )
+  //const c2 = new MyCollection<number>( Array.from( new Set ([1, 2, 3] ) ) )
+  const c2 = new MyCollection<number>( new Set ([1, 2, 3] ) ) 
   c2.add(4)
 
   const x: number = c2.get(0)

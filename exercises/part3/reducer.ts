@@ -4,7 +4,30 @@ function uuid() {
   return "" + Math.random() // since this doesn't really matter
 }
 
-type AppState = unknown // Fix
+interface Circle {
+  id: string;
+  x: number;
+  y: number;
+}
+
+  type MoveAction = {
+    type: "move";
+    deltaX: number;
+    deltaY: number; 
+    id: string;  
+  }
+
+  type AddAction = {
+    type: "add";
+    id: string;  
+    x: number;
+    y: number;    
+  }
+
+
+type AppState = {
+  readonly [key:string]: Circle
+} // Fix
 
 function getInitialState(): AppState {
   const id1 = uuid()
@@ -24,7 +47,7 @@ function getInitialState(): AppState {
   }
 }
 
-type AppActions = unknown // Fix
+type AppActions = MoveAction | AddAction;
 
 const circlesReducer: React.Reducer<AppState, AppActions> = (state, action) => {
   switch (action.type) {
