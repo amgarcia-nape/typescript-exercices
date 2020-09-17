@@ -15,17 +15,37 @@
     exchangeRate: number;
   };
 
-  class EventEmitter {
+  type DomEvents = {
+    click: OnClickArgs,
+    error: OnError,
+  }
+
+  type ServerEvents = {
+    data: OnData,
+    error: OnError,
+  }
+
+  type TheEvent = DomEvents | ServerEvents;
+ 
+  type EventName = string;
+  type yo = Record<EventName, any>;
+  //type yo = Record<string, any>;
+
+
+  class EventEmitter<EventTYPES extends yo> {
     // TODO: Bonus part 3: type more precisely
-    private listeners = new Map<any, Set<any>>();
+    private listeners : {
+      [ P in keyof EventTYPES ] : Set< (data: EventTYPES[keyof EventTYPES]) => any >
+    } = {};
+    /private listeners=new Map< keyof EventTYPES, Set< (data: EventTYPES[keyof EventTYPES]) => any > >();
 
     // TODO Part 1: type correctly
-    fire(event: any, arg: any) {
+    fire<EventTYPE extends keyof EventTYPES>(event: EventTYPE, arg: Readonly<EventTYPES[EventTYPE]>) {
       this.listeners.get(event)?.forEach((listener) => listener(arg));
     }
 
     // TODO Part 1: type correctly
-    on(event: any, callback: any) {
+    on<EventTYPE extends keyof EventTYPES>(event: EventTYPE, callback: (data: EventTYPES[EventTYPE]) => any ) {
       if (!this.listeners.has(event)) {
         this.listeners.set(event, new Set());
       }
@@ -43,11 +63,11 @@
    */
   // domListener handles events 'click' (OnClickArgs) and 'error' (OnError)
   // TODO: pass a generic argument to EventEmitter describing the possible events
-  const domListener = new EventEmitter();
+  const domListener = new EventEmitter<DomEvents>();
 
   // serverListener handles events 'data' (OnData) and 'error' (OnError)
   // TODO: pass a generic argument to EventEmitter describing the possible events
-  const serverListener = new EventEmitter();
+  const serverListener = new EventEmitter<ServerEvents>();
 
   // These statements should all succeed (without changing them)
   domListener.fire("click", { target: { value: "test " } });
